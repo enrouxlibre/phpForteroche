@@ -39,6 +39,8 @@
         }
         echo '</ul>';
     }
+
+    echo isset($message) ? '<p class="info">' . Utils::format($message) . '</p>' : '';
     ?>
 
     <form action="index.php" method="post" class="foldedCorner">
