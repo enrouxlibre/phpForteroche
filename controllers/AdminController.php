@@ -38,12 +38,12 @@ class AdminController
 
         // On récupère le critère de tri.
         $sortBy = Utils::request("sortBy", "title");
-        $ascending = Utils::request("ascending", "1");
+        $ascending = Utils::request("ascending", "1") == "1";
 
         // On récupère les articles.
         $articleManager = new ArticleManager();
         $articles = $articleManager->getAllArticles();
-        $articles = $articleManager->sortArticles($articles, $sortBy, $ascending);
+        $articles = Utils::sortArticles($articles, $sortBy, $ascending);
 
         // On affiche la page de statistiques.
         $view = new View("Statistiques");

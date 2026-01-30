@@ -129,17 +129,29 @@ class Article extends AbstractEntity
         return $this->dateUpdate;
     }
 
+    /**
+     * Getter pour le nombre de commentaires associés à l'article.
+     * @return int
+     */
     public function getCommentCount(): int
     {
         $commentManager = new CommentManager();
         return count($commentManager->getAllCommentsByArticleId($this->getId()));
     }
 
+    /**
+     * Setter pour le nombre de vues.
+     * @param int $views
+     */
     public function setViews(int $views): void
     {
         $this->views = $views;
     }
 
+    /**
+     * Getter pour le nombre de vues.
+     * @return int
+     */
     public function getViews(): int
     {
         return $this->views;

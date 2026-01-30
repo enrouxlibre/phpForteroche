@@ -37,7 +37,7 @@ class ArticleController
         $commentManager = new CommentManager();
 
 
-        // CHeck if user is connected
+        // On vérifie si l'utilisateur est connecté
         $editionMode = isset($_SESSION['user']);
         $commentId = Utils::request("commentId", -1);
         $commentToDelete = ($commentId > -1) ? $commentManager->getCommentById($commentId) : null;

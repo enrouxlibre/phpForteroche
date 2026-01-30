@@ -5,13 +5,14 @@
  * directement sans avoir besoin d'instancier un objet Utils.
  * Exemple : Utils::redirect('home'); 
  */
-class Utils {
+class Utils
+{
     /**
      * Convertit une date vers le format de type "Samedi 15 juillet 2023" en francais.
      * @param DateTime $date : la date à convertir.
      * @return string : la date convertie.
      */
-    public static function convertDateToFrenchFormat(DateTime $date) : string
+    public static function convertDateToFrenchFormat(DateTime $date): string
     {
         // Attention, s'il y a un soucis lié à IntlDateFormatter c'est qu'il faut
         // activer l'extention intl_date_formater (ou intl) au niveau du serveur apache. 
@@ -27,7 +28,7 @@ class Utils {
      * @param array $params : Facultatif, les paramètres de l'action sous la forme ['param1' => 'valeur1', 'param2' => 'valeur2']
      * @return void
      */
-    public static function redirect(string $action, array $params = []) : void
+    public static function redirect(string $action, array $params = []): void
     {
         $url = "index.php?action=$action";
         foreach ($params as $paramName => $paramValue) {
@@ -44,7 +45,7 @@ class Utils {
      * @param string $message : le message à afficher dans la popup.
      * @return string : le code js à insérer dans le bouton.
      */
-    public static function askConfirmation(string $message) : string
+    public static function askConfirmation(string $message): string
     {
         return "onclick=\"return confirm('$message');\"";
     }
@@ -55,7 +56,7 @@ class Utils {
      * @param string $string : la chaine à protéger.
      * @return string : la chaine protégée.
      */
-    public static function format(string $string) : string
+    public static function format(string $string): string
     {
         // Etape 1, on protège le texte avec htmlspecialchars.
         $finalString = htmlspecialchars($string, ENT_QUOTES);
@@ -70,7 +71,7 @@ class Utils {
                 $finalString .= "<p>$line</p>";
             }
         }
-        
+
         return $finalString;
     }
 
@@ -82,9 +83,35 @@ class Utils {
      * @param mixed $defaultValue : la valeur par défaut si la variable n'est pas définie.
      * @return mixed : la valeur de la variable ou la valeur par défaut.
      */
-    public static function request(string $variableName, mixed $defaultValue = null) : mixed
+    public static function request(string $variableName, mixed $defaultValue = null): mixed
     {
         return $_REQUEST[$variableName] ?? $defaultValue;
     }
 
+
+
+    /**
+     * Trie un tableau d'articles selon un critère et un ordre donné.
+     * @param array $articles : la liste des articles à trier.
+     * @param string $sortBy : le champ de tri ('title', 'views', 'comments', 'date_creation').
+     * @param bool $ascending : true pour un tri ascendant, false pour un tri descendant.
+     * @return array : la liste des articles triée.
+     */
+    public static function sortArticles(array $articles, string $sortBy, bool $ascending = true): array
+    {
+        usort($articles, function ($a, $b) use ($sortBy, $ascending) {
+            switch ($sortBy) {
+                case 'title':
+                    return ($ascending ? -1 : 1) * strcmp($a->getTitle(), $b->getTitle());
+                case 'views':
+                    return ($ascending ? -1 : 1) * ($b->getViews() - $a->getViews());
+                case 'comments':
+                    return ($ascending ? -1 : 1) * ($b->getCommentCount() - $a->getCommentCount());
+                case 'date_creation':
+                default:
+                    return ($ascending ? -1 : 1) * ($b->getDateCreation() <=> $a->getDateCreation());
+            }
+        });
+        return $articles;
+    }
 }

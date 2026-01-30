@@ -103,22 +103,4 @@ class ArticleManager extends AbstractEntityManager
         $sql = "UPDATE article SET views = views + 1 WHERE id = :id";
         $this->db->query($sql, ['id' => $id]);
     }
-
-    public function sortArticles(array $articles, string $sortBy, bool $ascending = true): array
-    {
-        usort($articles, function ($a, $b) use ($sortBy, $ascending) {
-            switch ($sortBy) {
-                case 'title':
-                    return ($ascending ? -1 : 1) * strcmp($a->getTitle(), $b->getTitle());
-                case 'views':
-                    return ($ascending ? -1 : 1) * ($b->getViews() - $a->getViews());
-                case 'comments':
-                    return ($ascending ? -1 : 1) * ($b->getCommentCount() - $a->getCommentCount());
-                case 'date_creation':
-                default:
-                    return ($ascending ? -1 : 1) * ($b->getDateCreation() <=> $a->getDateCreation());
-            }
-        });
-        return $articles;
-    }
 }
